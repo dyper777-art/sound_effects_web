@@ -1,14 +1,13 @@
 #!/bin/bash
 
+# Use Railway PORT if defined, otherwise default to 8000
+PORT=${PORT:-8000}
+
 # Apply migrations
 python manage.py migrate
 
-# Collect static files (optional, if you use static files)
+# Collect static files (optional)
 python manage.py collectstatic --noinput
 
-# Run the development server
-#!/bin/bash
-
-# Use Railway PORT if exists, else default to 8000
-PORT=${PORT:-8000}
+# Run Django development server
 python manage.py runserver 0.0.0.0:$PORT

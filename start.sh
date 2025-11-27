@@ -9,5 +9,5 @@ python manage.py migrate
 # Collect static files (optional)
 python manage.py collectstatic --noinput
 
-# Run Django development server
-python manage.py runserver 0.0.0.0:$PORT
+# Start the app with Gunicorn
+gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT

@@ -6,8 +6,8 @@ PORT=${PORT:-8000}
 # Apply migrations
 python manage.py migrate
 
-# Collect static files (optional)
+# Collect static files
 python manage.py collectstatic --noinput
 
-# Start the app with Gunicorn
-gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT
+# Start Gunicorn server
+gunicorn myproject.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --threads 2

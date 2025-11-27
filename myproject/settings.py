@@ -94,14 +94,6 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 
-# --- Email backend for dev/testing ---
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'dyper777@gmail.com'       # your Gmail address
-EMAIL_HOST_PASSWORD = 'qxze vzvu sjhh nxjy'     # see step 2 below
-
 
 # --- Session settings ---
 SESSION_COOKIE_AGE = 1209600         # 2 weeks in seconds
@@ -119,8 +111,6 @@ STATICFILES_DIRS = [
 
 EMAIL_BACKEND = "emails.resend_backend.ResendEmailBackend"
 
-# RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
-RESEND_API_KEY = "re_dkhpchgx_KjGKF6VHmTnNnpPXoXhjMX3U"
+RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
 
-# MYHOSTEMAIL = "mail@mensokkeang.msk.solutions"
 MYHOSTEMAIL = os.environ.get("MYHOSTEMAIL")

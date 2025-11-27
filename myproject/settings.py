@@ -4,12 +4,14 @@ Django settings for myproject project.
 
 import os
 from pathlib import Path
+from decouple import config
+
 
 # --- Base directory ---
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- Security ---
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = config("SECRET_KEY")
 DEBUG = True
 ALLOWED_HOSTS = []
 
@@ -99,8 +101,8 @@ LOGOUT_REDIRECT_URL = '/login/'
 SESSION_COOKIE_AGE = 1209600         # 2 weeks in seconds
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY")
-STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
+STRIPE_PUBLIC_KEY = config("STRIPE_PUBLIC_KEY")
+STRIPE_SECRET_KEY = config("STRIPE_SECRET_KEY")
 
 
 # Static files (CSS, JavaScript, Images)
@@ -111,6 +113,6 @@ STATICFILES_DIRS = [
 
 EMAIL_BACKEND = "emails.resend_backend.ResendEmailBackend"
 
-RESEND_API_KEY = os.environ.get("RESEND_API_KEY")
+RESEND_API_KEY = config("RESEND_API_KEY")
 
-MYHOSTEMAIL = os.environ.get("MYHOSTEMAIL")
+MYHOSTEMAIL = config("MYHOSTEMAIL")

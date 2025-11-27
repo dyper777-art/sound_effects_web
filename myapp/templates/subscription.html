@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block subscription_active %} active {% endblock %}
+
+{% block content %}
+
+<section class="latest-podcast-section section-padding pb-0" id="section_2">
+            <div class="container">
+                <div class="row justify-content-center">
+
+                    <div class="col-lg-12 col-12">
+                        <div class="section-title-wrap mb-5">
+                            <h4 class="section-title">Lastest episodes</h4>
+                        </div>
+                    </div>
+
+                    {% for plan in plans %}
+
+                        {% if plan.name != 'Free' %}
+
+                        <div class="col-lg-4 col-8">
+                            <div class="custom-block d-flex">
+
+                                <div class="custom-block-info">
+
+                                    <h5 class="mb-2">
+                                        <a href="detail-page.html">
+                                            {{ plan.name }}
+                                        </a>
+                                    </h5>
+
+                                    <div class="profile-block d-flex">
+
+                                        <p>
+                                            ${{ plan.price }} / month
+                                            <strong>{{ plan.daily_limit }} Download Per Day</strong>
+                                        </p>
+                                    </div>
+
+                                    <form class="mt-2" method="POST" action="{% url 'create_checkout' plan.id %}" style="display:inline; cursor:pointer;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn custom-btn"
+                                            {% if current_subscription and current_subscription.plan.id == plan.id %}disabled{% endif %}>
+                                            {% if current_subscription and current_subscription.plan.id == plan.id %}
+                                                Current Plan
+                                            {% else %}
+                                                Subscribe
+                                            {% endif %}
+                                        </button>
+                                    </form>
+
+
+                                    
+                                    
+                                </div>
+
+                            </div>
+                        </div>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+                </div>
+            </div>
+        </section>
+
+        
+{% endblock %}
+
+
+

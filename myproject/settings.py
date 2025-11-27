@@ -9,7 +9,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # --- Security ---
-SECRET_KEY = 'django-insecure-ryx24en-yc*brfyg3706a5ua_8-whhx7_il@7jn-ut$6o%$jyd'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = True
 ALLOWED_HOSTS = []
 

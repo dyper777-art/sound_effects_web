@@ -7,4 +7,8 @@ python manage.py migrate
 python manage.py collectstatic --noinput
 
 # Run the development server
+#!/bin/bash
+
+# Use Railway PORT if exists, else default to 8000
+PORT=${PORT:-8000}
 python manage.py runserver 0.0.0.0:$PORT

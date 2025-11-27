@@ -29,13 +29,15 @@ INSTALLED_APPS = [
 # --- Middleware ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',  # session support
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # <-- add this
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',  # auth
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'myproject.urls'
 
@@ -116,3 +118,18 @@ EMAIL_BACKEND = "emails.resend_backend.ResendEmailBackend"
 RESEND_API_KEY = config("RESEND_API_KEY")
 
 MYHOSTEMAIL = config("MYHOSTEMAIL")
+
+
+# settings.py (add near STATIC_URL)
+STATIC_URL = '/static/'
+
+# Local static files (for development)
+STATICFILES_DIRS = [
+    BASE_DIR / 'myapp' / 'static',
+]
+
+# Collected static files (for production)
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

@@ -228,6 +228,18 @@ https://templatemo.com/tm-584-pod-talk
     <script src="{% static 'myapp/js/owl.carousel.min.js' %}"></script>
     <script src="{% static 'myapp/js/custom.js' %}"></script>
 
+     <script>
+        {% if messages %}
+            {% for message in messages %}
+                Swal.fire({
+                    icon: '{% if message.tags == "error" %}error{% else %}success{% endif %}',
+                    title: '{% if message.tags == "error" %}Oops...{% else %}Success{% endif %}',
+                    text: '{{ message }}'
+                });
+            {% endfor %}
+        {% endif %}
+    </script>
+
 </body>
 
 </html>

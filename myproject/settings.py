@@ -40,6 +40,7 @@ MIDDLEWARE = [
 
 CSRF_TRUSTED_ORIGINS = [
     'https://soundeffectsweb-production.up.railway.app',
+    'https://mennsokkeang.msk.solutions',
 ]
 
 

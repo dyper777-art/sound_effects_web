@@ -240,6 +240,13 @@ def home(request):
 # Download API / File
 # -------------------------------
 
+from django.contrib import messages
+from django.shortcuts import redirect, get_object_or_404
+from django.http import FileResponse, Http404
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+import os
+
 @login_required
 def download_product_api(request, product_id):
     user = request.user
@@ -250,29 +257,37 @@ def download_product_api(request, product_id):
     try:
         subscription = user.subscription
     except Subscription.DoesNotExist:
-        return JsonResponse({"success": False, "message": "No subscription found."})
+        messages.error(request, "No subscription found.")
+        return redirect('home')  # or any page you want
 
     if not subscription.active():
-        return JsonResponse({"success": False, "message": "Subscription expired."})
+        messages.error(request, "Subscription expired.")
+        return redirect('home')
 
     plan_order = ["Free", "Basic", "Pro"]
     user_plan_name = subscription.plan.name
     product_plan_name = product.subscription_plan.name
 
     if plan_order.index(product_plan_name) > plan_order.index(user_plan_name):
-        return JsonResponse({"success": False, "message": "This product is not included in your subscription."})
+        messages.error(request, "This product is not included in your subscription.")
+        return redirect('home')
 
     downloads_today = DownloadLog.objects.filter(user=user, date=today).count()
     if downloads_today >= subscription.plan.daily_limit:
-        return JsonResponse({"success": False, "message": "Daily download limit reached."})
+        messages.error(request, "Daily download limit reached.")
+        return redirect('home')
 
     if not product.file:
-        raise Http404("File not found.")
+        messages.error(request, "File not found.")
+        return redirect('home')
 
+    # Log the download
     DownloadLog.objects.create(user=user, product=product)
 
+    # Serve the file
     file_handle = product.file.open('rb')
     return FileResponse(file_handle, as_attachment=True, filename=os.path.basename(product.file.name))
+
 
 
 # -------------------------------
@@ -309,26 +324,16 @@ def subscription_view(request):
 @login_required
 def profile_view(request):
     user = request.user
-    try:
-        subscription = user.subscription
-    except:
-        subscription = None
+    subscription = getattr(user, 'subscription', None)  # safer than try/except
+    subscription_plan = subscription.plan if subscription else None
 
     context = {
         'user': user,
-        'subscription': subscription
+        'subscription': subscription,
+        'subscription_plan': subscription_plan
     }
     return render(request, 'profile.html', context)
 
-
-from django.contrib.auth.models import User
-from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import send_mail
-from django.shortcuts import render, redirect
-from django.urls import reverse
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
-from django.conf import settings
 
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator

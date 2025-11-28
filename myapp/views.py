@@ -202,13 +202,22 @@ def register_view(request):
         activation_codes[code] = user.username
 
         activation_link = request.build_absolute_uri(f'/activate/{code}/')
-        send_mail(
-            'Activate your account',
-            f'Click this link to activate your account: {activation_link}',
-            'no-reply@example.com',
-            [email],
-            fail_silently=False
-        )
+        resend.api_key = settings.RESEND_API_KEY
+
+        try:
+            resend.Emails.send({
+                "from": "mail@mensokkeang.msk.solutions",
+                "to": [email],
+                "subject": "Activate your account",
+                "html": f"""
+                    <p>Hello {username},</p>
+                    <p>Click the link below to activate your account:</p>
+                    <p><a href="{activation_link}">Activate Account</a></p>
+                """
+            })
+        except Exception as e:
+            print(f"Activation email failed: {e}")
+            return render(request, 'register.html', {'error': 'Could not send activation email. Please try again.'})
 
         return render(request, 'check_email.html', {'email': email})
 

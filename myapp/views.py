@@ -206,7 +206,7 @@ def register_view(request):
 
         try:
             resend.Emails.send({
-                "from": "mail@mensokkeang.msk.solutions",
+                "from": settings.MYHOSTEMAIL,
                 "to": [email],
                 "subject": "Activate your account",
                 "html": f"""
